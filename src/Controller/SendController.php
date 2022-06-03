@@ -14,7 +14,6 @@ class SendController{
         <?php
         }
     }
-
     private function AddMessage($message){
         $username = $_COOKIE['username'];
         if ($message != ''){
@@ -26,7 +25,6 @@ class SendController{
         else
             echo 'Ur message is empty';
     }
-
     public function run(){
         $loader = new FilesystemLoader(dirname(__DIR__, 2).'/templates/');
         $twig = new Environment($loader);

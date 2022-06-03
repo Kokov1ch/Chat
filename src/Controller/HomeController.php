@@ -7,7 +7,7 @@ use Monolog\Handler\StreamHandler;
 class HomeController{
 
     private function PrintMessages(){
-    $db = json_decode(file_get_contents("D:\Chat1\public\messages.json"));
+    $db = json_decode(file_get_contents( dirname(__DIR__,2).'/public/messages.json'));;
     foreach($db->messages as $it){
         echo date('m/d/Y H:i:s', $it->date) . ' ' . $it->username . ' ' . $it->message;
         ?>
@@ -15,7 +15,7 @@ class HomeController{
         <?php
         }
     }
-    public function login(){
+    private function login(){
         $users = array(
             'admin' => '123',
             'fedor' => 'fet',
