@@ -41,15 +41,6 @@ class HomeController{
         return $result;
     }
     private function PrintMessages(){
-        /*
-    $db = json_decode(file_get_contents( dirname(__DIR__,2).'/public/messages.json'));;
-    foreach($db->messages as $it){
-        echo date('m/d/Y H:i:s', $it->date) . ' ' . $it->username . ' ' . $it->message;
-        ?>
-        <br></br>
-        <?php
-        }
-        */
         foreach ($this->getMessages() as $message){
             echo $message['name'].' '. $message['date']. ' '. $message['info'];
             ?>
