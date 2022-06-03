@@ -1,0 +1,14 @@
+{
+    "name": "kokov1ch/chat",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Routes\\": "src/Routes/",
+            "Controller\\": "src/Controller/"
+        }
+    },
+    "require": {
+        "twig/twig": "^3.3",
+        "monolog/monolog": "^2.6"
+    }
+}
