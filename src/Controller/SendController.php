@@ -2,28 +2,61 @@
 namespace Controller;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
-
+use PDO;
 class SendController{
-
-     private function PrintMessages(){
-    $db = json_decode(file_get_contents( dirname(__DIR__,2).'/public/messages.json'));
-    foreach($db->messages as $it){
-        echo date('m/d/Y H:i:s', $it->date) . ' ' . $it->username . ' ' . $it->message;
-        ?>
-        <br></br>
-        <?php
+    private function getArr($query): array
+    {
+        $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','dfdb7kjy3000');
+        $pre = $db->prepare($query);
+        $pre->execute();
+        return $pre->fetchAll();
+    }
+    private function getMessages(): array{
+        $result = array();
+        foreach($this->getArr ('SELECT user_id, (SELECT username from users where users.user_id = messages.user_id)
+    as username, date, text from messages')as $it){
+            $user=[
+                'id'=>$it['user_id'],
+                'name'=>$it['username'],
+                'date'=>$it['date'],
+                'info'=>$it['text']
+            ];
+            $result[] = $user;
         }
+        return $result;
+    }
+    private function PrintMessages(){
+         foreach ($this->getMessages() as $message){
+             echo $message['name'].' '. $message['date']. ' '. $message['info'];
+             ?>
+             <br></br>
+             <?php
+         }
     }
     private function AddMessage($message){
         $username = $_COOKIE['username'];
         if ($message != ''){
-            $db = json_decode(file_get_contents( dirname(__DIR__,2).'/public/messages.json'));
-            $info = (object) ['date'=>time()+ 60*60*10, 'username' => $username, 'message' => $message];
-            $db->messages[] = $info;
-            file_put_contents("messages.json", json_encode($db));
+            $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','dfdb7kjy3000');
+            $first_q = $db->prepare("SELECT user_id from users where username = '$username'");
+            $first_q->execute();
+
+            $arr = $first_q->fetchAll();
+            foreach ($arr as $it) {
+                $result = [
+                    'id' => $it['user_id']
+                ];
+                $id = $result;
+                }
+            $second_q = $db->prepare('INSERT INTO `chat`.`messages` (`user_id`, `date`, `text`) VALUES (:id, :date, :text)');
+            $date = date("Y-m-d H:i:s");
+            $second_q->bindParam(':date', $date, PDO::PARAM_STR);
+            $second_q->bindParam(':text', $message, PDO::PARAM_STR);
+            $second_q->bindParam(':id', $id['id'], PDO::PARAM_STR);
+            $second_q->execute();
         }
-        else
-            echo 'Ur message is empty';
+        else{
+            echo 'Ur message is empty'."<br></br>";
+        }
     }
     public function run(){
         $loader = new FilesystemLoader(dirname(__DIR__, 2).'/templates/');
