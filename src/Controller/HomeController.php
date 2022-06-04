@@ -9,7 +9,7 @@ class HomeController{
 
     private function getArr($query): array
     {
-        $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','dfdb7kjy3000');
+        $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','************');
         $pre = $db->prepare($query);
         $pre->execute();
         return $pre->fetchAll();
