@@ -6,7 +6,7 @@ use PDO;
 class SendController{
     private function getArr($query): array
     {
-        $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','dfdb7kjy3000');
+        $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','***********');
         $pre = $db->prepare($query);
         $pre->execute();
         return $pre->fetchAll();
@@ -36,7 +36,7 @@ class SendController{
     private function AddMessage($message){
         $username = $_COOKIE['username'];
         if ($message != ''){
-            $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','dfdb7kjy3000');
+            $db = new PDO ('mysql:host=localhost:3306;dbname=chat', 'root','************');
             $first_q = $db->prepare("SELECT user_id from users where username = '$username'");
             $first_q->execute();
 
